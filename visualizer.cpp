@@ -33,7 +33,7 @@ struct visualizer {
             if (action == "shuf") cases.push_back(loadrun("shuffles", nextarg(line), true));
             else if (action == "sort") cases.push_back(loadrun("sorts", nextarg(line), true));
             else if (action == "delay") arr.high.delayMult = std::stod(nextarg(line));
-            else if (action == "new") cases.push_back(run([&] (varray &arr, std::vector<std::variant<int, double>> args, std::string &name) {arr.resize(*std::get_if<int>(&args[0]));}, {std::stoi(nextarg(line))}, false));
+            else if (action == "new") cases.push_back(run{[&] (varray &arr, std::vector<std::variant<int, double>> args, std::string &name) {arr.resize(*std::get_if<int>(&args[0]));}, {std::stoi(nextarg(line))}, false});
         } 
     }
 
