@@ -1,0 +1,4 @@
+delay 1
+new 256
+shuf random
+sort insertionsort
