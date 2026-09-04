@@ -24,7 +24,7 @@ run loadrun(std::string from, std::string str, bool sleep) {
     std::string libname = from+"/"+name+".dll";
     std::cout << "loading run from " << libname << "\n";
     HINSTANCE hLib;
-#ifndef __INTELLISENSE__
+#ifndef __INTELLISENSE__ // shut up
     hLib = LoadLibrary(libname.c_str());
 #endif
     if (!hLib) {
@@ -45,5 +45,5 @@ run loadrun(std::string from, std::string str, bool sleep) {
         argstr.erase(0, pos+1);
         pos = argstr.find_first_of(",)");
     }
-    return run(r, args, sleep);
+    return run{r, args, sleep};
 }
