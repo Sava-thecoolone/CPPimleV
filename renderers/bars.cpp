@@ -25,18 +25,17 @@ extern "C" __declspec(dllexport) void run(varray &arr, std::vector<std::variant<
             double scale = GetScreenWidth()/((double)arr.len);
             for (int i = 0; i < arr.len; i += std::max(1/scale, 1.0)) {
                 Color col = WHITE;
-                if (arr.high.cur != -1 && abs(arr.high.cur-i)*scale <= 3) {
+                int value = arr.high.cur.load();
+                if (value != -1 && abs(value-i)*scale <= 3) {
                     col = RED;
-                } // else if (highlight.stabilityCheck) {
-                //     col = Color.getHSBColor(stabilityTable[i]/(float)len/2, 1, 1)
-                // }
+                }
                 int w = (int)(scale*(i+1))-last;
                 int y = (int)(((double)arr.values[i]/arr.len)*GetScreenHeight());
                 DrawRectangle(last, GetScreenHeight()-y, w, y, col);
                 last += w;
             }
-            DrawTextOutline(font, name.c_str(), Vector2(10, 10), WHITE);
-            DrawTextOutline(font, (std::to_string(arr.len)+" values").c_str(), Vector2(10, 10+font.baseSize), WHITE);
+            DrawTextOutline(font, name.c_str(), Vector2{10, 10}, WHITE);
+            DrawTextOutline(font, (std::to_string(arr.len)+" values").c_str(), Vector2{10, 10.0f+font.baseSize}, WHITE);
         EndDrawing();
     }
 }
