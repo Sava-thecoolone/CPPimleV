@@ -5,6 +5,8 @@
 #include "raylib.h"
 #include "varray.cpp"
 
+#define CHANNELS 4
+
 tsf *soundfont = nullptr;
 
 void doaudio(void *buffer, unsigned int frames) {
@@ -12,15 +14,17 @@ void doaudio(void *buffer, unsigned int frames) {
 }
 
 void setupaudiothread(varray &arr) {
-    int note = -1;
     std::thread audio([&] {
         while (!WindowShouldClose()) {
-            if (arr.high.cur != -1) {
-                note = ((double)arr.values[arr.high.cur]/arr.len)*80+20;
-                tsf_note_on(soundfont, 56, note, 0.5f);
+            int cur = arr.high.cur.load();
+            if (cur != -1) {
+                double note = ((double)arr.values[cur]/arr.len)*80+20;
+                tsf_channel_note_on(soundfont, 0, note, 1.0f);
+                tsf_channel_set_pitchwheel(soundfont, 0, (int)((note-((int)note))*8192.0)+8192);
+                tsf_channel_midi_control(soundfont, 0, 91, 10);
             }
             std::this_thread::sleep_for(std::chrono::milliseconds(1));
-            if (note != -1) tsf_note_off(soundfont, 56, note);
+            tsf_channel_midi_control(soundfont, 0, 123, 0);
         }
     });
     audio.detach();
@@ -32,8 +36,13 @@ AudioStream setupsound(varray &arr) {
     if (!soundfont) {
         throw std::runtime_error("no sfx.sf2");
     }
-    tsf_set_output(soundfont, TSF_STEREO_INTERLEAVED, 44100, 0.0f);
-    AudioStream stream = LoadAudioStream(44100, 32, 2);
+    tsf_set_output(soundfont, TSF_MONO, 44100, 0.0f);
+    tsf_channel_set_presetnumber(soundfont, 0, 16, 0);
+    tsf_channel_midi_control(soundfont, 0, 72, 127);
+    // for (int i = 0; i < tsf_get_presetcount(soundfont); i++) {
+    //     std::cout << i << " : " << tsf_bank_get_presetname(soundfont, 0, i) << "\n";
+    // }
+    AudioStream stream = LoadAudioStream(44100, 32, 1);
     SetAudioStreamCallback(stream, doaudio);
     PlayAudioStream(stream);
     return stream;
