@@ -1,4 +1,7 @@
-delay 1
+delay 0.5
 new 1024
 shuf random
-sort WikiSort
+sort timsort
+new 1024
+shuf random
+sort pdqsort
