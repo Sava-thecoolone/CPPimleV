@@ -1,3 +1,5 @@
+// helper utility to help translate SimpleV's java algorithms to c++
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
