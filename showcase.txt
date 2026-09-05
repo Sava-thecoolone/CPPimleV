@@ -1,4 +1,4 @@
 delay 1
-new 256
+new 1024
 shuf random
-sort insertionsort
+sort WikiSort
