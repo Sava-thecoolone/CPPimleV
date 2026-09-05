@@ -28,7 +28,6 @@ struct varray {
     }
 
     void resize(int len) {
-        if (this->len == len) return;
         free(values);
         this->len = len;
         high.len = len;

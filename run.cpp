@@ -12,6 +12,7 @@ struct run {
     bool sleep;
 
     void exec(varray &arr, std::string &name) {
+        if (sleep) std::this_thread::sleep_for(std::chrono::milliseconds(1000));
         func(arr, args, name);
         arr.high.cur = -1;
         if (sleep) std::this_thread::sleep_for(std::chrono::milliseconds(1000));
