@@ -7,8 +7,8 @@ extern "C" __declspec(dllexport) void run(varray &arr, std::vector<std::variant<
     name = "Shuffle: Random";
     std::random_device rd;
     std::mt19937 rng(rd());
-    std::uniform_int_distribution<int> dist(0, arr.len-1);
-    for (int i = 0; i < arr.len; i++) {
+    for (int i = arr.len-1; i >= 1; i--) {
+        std::uniform_int_distribution<int> dist(0, i);
         std::swap(arr[i], arr[dist(rng)]);
     }
 }
