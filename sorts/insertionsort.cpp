@@ -3,7 +3,7 @@
 #include "../varray.cpp"
 
 extern "C" __declspec(dllexport) void run(varray &arr, std::vector<std::variant<int, double>> args, std::string &name) {
-    name = "Sort: Insertion Sort";
+    name = "Sort: Insertion sort";
     for (int i = 0; i < arr.len; i++) {
         int pos = -1;
         for (int j = i-1; j >= 0; j--) {
