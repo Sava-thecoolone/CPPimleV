@@ -5,8 +5,6 @@
 #include "raylib.h"
 #include "varray.cpp"
 
-#define CHANNELS 4
-
 tsf *soundfont = nullptr;
 
 void doaudio(void *buffer, unsigned int frames) {
