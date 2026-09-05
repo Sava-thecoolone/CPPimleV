@@ -15,7 +15,6 @@ std::string nextarg(std::string &str, std::unordered_map<std::string, const char
     std::string ret = str.substr(0, pos);
     str.erase(0, pos+1);
     for (auto &[from, to] : suiteargs) {
-        std::cout << from << "\n";
         int pos = 0;
         while ((pos = ret.find(from)) < ret.length()) {
             ret.replace(pos, from.length(), to);
