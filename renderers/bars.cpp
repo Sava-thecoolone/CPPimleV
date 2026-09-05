@@ -1,5 +1,6 @@
 #include <variant>
 #include <iostream>
+#include <cmath>
 #include "raylib.h"
 #include "../varray.cpp"
 
