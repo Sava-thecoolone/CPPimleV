@@ -168,7 +168,6 @@ extern "C" __declspec(dllexport) void run(varray &arr, std::vector<std::variant<
             }
         }
         if (st.size() >= 3) {
-            std::cout << st.size() << "\n";
             int X = curRun;
             int Y = st[st.size()-2];
             int Z = st[st.size()-3];
