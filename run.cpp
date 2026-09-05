@@ -20,10 +20,10 @@ struct run {
 };
 using funcsignature = void(__stdcall*)(varray &, std::vector<std::variant<int, double>>, std::string &);
 
-run loadrun(std::string from, std::string str, bool sleep) {
+run loadrun(std::string from, std::string str, bool sleep, bool debug) {
     std::string name = str.substr(0, str.find_first_of("("));
     std::string libname = from+"/"+name+".dll";
-    std::cout << "loading run from " << libname << "\n";
+    if (debug) std::cout << "loading run from " << libname << "\n";
     HINSTANCE hLib;
 #ifndef __INTELLISENSE__ // shut up
     hLib = LoadLibrary(libname.c_str());
@@ -46,5 +46,6 @@ run loadrun(std::string from, std::string str, bool sleep) {
         argstr.erase(0, pos+1);
         pos = argstr.find_first_of(",)");
     }
+    if (debug) std::cout << "loaded\n";
     return run{r, args, sleep};
 }

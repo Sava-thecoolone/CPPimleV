@@ -11,8 +11,8 @@ struct renderer {
 
     renderer() {}
 
-    renderer(std::string name) {
+    renderer(std::string name, bool debug) {
         this->name = name;
-        run = loadrun("renderers", name, false);
+        run = loadrun("renderers", name, false, debug);
     }
 };

@@ -10,30 +10,40 @@
 #include "renderer.cpp"
 #include "sounds.cpp"
 
-std::string nextarg(std::string &str) {
+std::string nextarg(std::string &str, std::unordered_map<std::string, const char *> &suiteargs) {
     int pos = str.find_first_of(" ");
     std::string ret = str.substr(0, pos);
     str.erase(0, pos+1);
+    for (auto &[from, to] : suiteargs) {
+        std::cout << from << "\n";
+        int pos = 0;
+        while ((pos = ret.find(from)) < ret.length()) {
+            ret.replace(pos, from.length(), to);
+        }
+    }
     return ret;
 }
 
 struct visualizer {
     std::vector<run> cases;
+    std::unordered_map<char, const char *> args;
+    std::unordered_map<std::string, const char *> suiteargs;
     renderer rend;
     varray arr;
     std::string curname;
 
-    visualizer(int len, std::string rendname) : arr(len), rend(rendname) {curname = "Awaiting input...";}
+    visualizer(int len, std::string rendname, std::unordered_map<char, const char *> a, std::unordered_map<std::string, const char *> s) : arr(len), rend(rendname, a.contains('d')), args(a), suiteargs(s) {curname = "Awaiting input...";}
 
     void loadcases(std::string name) {
         std::ifstream file(name);
         std::string line;
         while (std::getline(file, line)) {
-            std::string action = nextarg(line);
-            if (action == "shuf") cases.push_back(loadrun("shuffles", nextarg(line), false));
-            else if (action == "sort") cases.push_back(loadrun("sorts", nextarg(line), true));
-            else if (action == "delay") arr.high.delayMult = std::stod(nextarg(line));
-            else if (action == "new") cases.push_back(run{[&] (varray &arr, std::vector<std::variant<int, double>> args, std::string &name) {arr.resize(*std::get_if<int>(&args[0]));}, {std::stoi(nextarg(line))}, false});
+            std::string action = nextarg(line, suiteargs);
+            if (action == "shuf") cases.push_back(loadrun("shuffles", nextarg(line, suiteargs), false, args.contains('d')));
+            else if (action == "sort") cases.push_back(loadrun("sorts", nextarg(line, suiteargs), true, args.contains('d')));
+            else if (action == "delay") arr.high.delayMult = std::stod(nextarg(line, suiteargs));
+            else if (action == "new") cases.push_back(run{[&] (varray &arr, std::vector<std::variant<int, double>> args, std::string &name) {arr.resize(*std::get_if<int>(&args[0]));}, {std::stoi(nextarg(line, suiteargs))}, false});
+            else if (action == "default") {const char *var = nextarg(line, suiteargs).c_str(); if (!suiteargs.contains(var)) {suiteargs[var] = nextarg(line, suiteargs).c_str();}}
         } 
     }
 
