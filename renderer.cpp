@@ -11,8 +11,8 @@ struct renderer {
 
     renderer() {}
 
-    renderer(std::string name, bool debug) {
+    renderer(std::string name, std::unordered_map<std::string, std::function<void(varray &, std::vector<std::variant<int, double>>, std::string &)>> &cache, bool debug) {
         this->name = name;
-        run = loadrun("renderers", name, false, debug);
+        run = loadrunfromdll("renderers", name, cache, false, debug);
     }
 };
