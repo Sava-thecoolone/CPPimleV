@@ -14,7 +14,7 @@ void doaudio(void *buffer, unsigned int frames) {
 void setupaudiothread(varray &arr) {
     std::thread audio([&] {
         while (!WindowShouldClose()) {
-            tsf_channel_note_off_all(soundfont, 0);
+            tsf_channel_sounds_off_all(soundfont, 0);
             int cur = arr.high.cur.load();
             if (cur != -1) {
                 double note = ((double)arr.values[cur]/arr.len)*80+25;
@@ -22,7 +22,7 @@ void setupaudiothread(varray &arr) {
                 tsf_channel_set_pitchwheel(soundfont, 0, (int)((note-((int)note))*8192.0)+8192);
                 tsf_channel_midi_control(soundfont, 0, 91, 10);
             }
-            std::this_thread::sleep_for(std::chrono::milliseconds(1));
+            std::this_thread::sleep_for(std::chrono::microseconds(1000));
         }
     });
     audio.detach();
