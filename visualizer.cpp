@@ -39,10 +39,10 @@ struct visualizer {
         std::string line;
         while (std::getline(file, line)) {
             std::string action = nextarg(line, suiteargs);
-            if (action == "shuf") cases.push_back(loadrunfromdll("shuffles", nextarg(line, suiteargs), cache, false, args.contains('d')));
-            else if (action == "sort") cases.push_back(loadrunfromdll("sorts", nextarg(line, suiteargs), cache, true, args.contains('d')));
+            if (action == "shuf") cases.push_back(loadrunfromdll("shuffles", nextarg(line, suiteargs), cache, false));
+            else if (action == "sort") cases.push_back(loadrunfromdll("sorts", nextarg(line, suiteargs), cache, true));
             else if (action == "delay") arr.high.delayMult = std::stod(nextarg(line, suiteargs));
-            else if (action == "new") cases.push_back(loadrunfromfunc("__new", [&] (varray &arr, std::vector<std::variant<int, double>> args, std::string &name) {arr.resize(*std::get_if<int>(&args[0]));}, cache, {std::stoi(nextarg(line, suiteargs))}, false, args.contains('d')));
+            else if (action == "new") cases.push_back(loadrunfromfunc("__new", [&] (varray &arr, std::vector<std::variant<int, double>> args, std::string &name) {arr.resize(*std::get_if<int>(&args[0]));}, cache, {std::stoi(nextarg(line, suiteargs))}, false));
             else if (action == "default") {const char *var = nextarg(line, suiteargs).c_str(); if (!suiteargs.contains(var)) {suiteargs[var] = nextarg(line, suiteargs).c_str();}}
         } 
     }

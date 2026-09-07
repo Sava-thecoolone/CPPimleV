@@ -15,9 +15,9 @@ void setupaudiothread(varray &arr) {
     std::thread audio([&] {
         while (!WindowShouldClose()) {
             tsf_channel_sounds_off_all(soundfont, 0);
-            int cur = arr.high.cur.load();
-            if (cur != -1) {
-                double note = ((double)arr.values[cur]/arr.len)*80+25;
+            int val = arr.high.lastval.load();
+            if (val != -1) {
+                double note = ((double)val/arr.len)*80+25;
                 tsf_channel_note_on(soundfont, 0, note, 1.0f); // from ArrayV
                 tsf_channel_set_pitchwheel(soundfont, 0, (int)((note-((int)note))*8192.0)+8192);
                 tsf_channel_midi_control(soundfont, 0, 91, 10);

@@ -1,0 +1,1 @@
+g++ main.cpp -o main.exe -lraylib -std=c++23 -lstdc++exp %*

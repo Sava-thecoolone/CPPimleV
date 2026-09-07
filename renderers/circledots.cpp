@@ -30,7 +30,7 @@ extern "C" __declspec(dllexport) void run(varray &arr, std::vector<std::variant<
                 int x = GetScreenWidth()/2+(int)(unitX*(dist*GetScreenHeight()/2));
                 int y = GetScreenHeight()/2+(int)(unitY*(dist*GetScreenHeight()/2));
                 DrawRectangle(x-1, y-1, 3, 3, WHITE);
-                int value = arr.high.cur.load();
+                int value = arr.high.lastidx.load();
                 if (value != -1 && abs(value-i)*scale <= 3) {
                     DrawRectangle(x-4, y-4, 9, 9, RED);
                 }

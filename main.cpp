@@ -1,5 +1,15 @@
 #include <iostream>
+#include <csignal>
+#include <stacktrace>
+#include <cstdlib>
 #include "visualizer.cpp"
+#include "config.h"
+
+void crash_handler(int signal) {
+    std::cerr << "crash: " << signal << "\n";
+    std::cerr << std::stacktrace::current() << '\n';
+    std::exit(signal);
+}
 
 int main(int argc, char **argv) {
     if (argc <= 1) throw std::runtime_error("not enough arguments");
@@ -15,6 +25,10 @@ int main(int argc, char **argv) {
             suiteargs["$"+std::to_string(suiteargc++)] = argv[i];
         }
     }
+#ifdef DEBUG
+        std::signal(SIGSEGV, crash_handler);
+        std::signal(SIGABRT, crash_handler);
+#endif
     visualizer vis(1024, rendname, args, suiteargs);
     vis.loadcases(argv[1]);
     vis.start();

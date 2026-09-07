@@ -1,53 +1,67 @@
 #pragma once
 #include <vector>
-#include <stdlib.h>
-#include <cstring>
-#include <stacktrace>
 #include "highlight.cpp"
 
+struct vval {
+    int val;
+    int idx;
+    highlight *high;
+
+    vval() {}
+    vval(int v) : val(v) {}
+    vval(int v, int i, highlight *h) : val(v), idx(i), high(h) {}
+    vval &operator=(vval &other) {high->doHigh(idx, other.val); this->val = other.val; return *this;}
+    vval &operator=(int val) {high->doHigh(idx, val); this->val = val; return *this;}
+    vval(vval &&other) noexcept : val(other.val), idx(other.idx), high(other.high) {}
+    operator int() {return val;}
+};
+
 struct varray {
-    int *values;
+    vval *values;
     int len;
     highlight high;
+    std::mutex mutex;
 
     varray() {}
     
     varray(int l) : len(l), high(l) {
-        values = (int*)malloc(len*sizeof(int));
-        for (int i = 0; i < len; i++) values[i] = i;
+        values = new vval[len];
+        for (int i = 0; i < len; i++) new (&values[i]) vval(i, i, &high);
     };
 
-    varray(const varray &other) : len(other.len) {
-        free(values);
-        values = (int*)malloc(len*sizeof(int));
-        memcpy(values, other.values, len*sizeof(int));
+    varray(const varray &other) : len(other.len), high(other.len) {
+        delete[] values;
+        values = new vval[len];
+        for (int i = 0; i < len; i++) new (&values[i]) vval(other.values[i], i, &high);
     }
 
     ~varray() {
-        free(values);
+        delete[] values;
     }
 
     void resize(int len) {
-        free(values);
+        std::lock_guard<std::mutex> lock(mutex);
+        delete[] values;
         this->len = len;
-        high.len = len;
-        values = (int*)malloc(len*sizeof(int));
-        for (int i = 0; i < len; i++) values[i] = i;
+        new (&high) highlight(len);
+        values = new vval[len];
+        for (int i = 0; i < len; i++) new (&values[i]) vval(i, i, &high);
     }
 
     varray &operator=(const varray &other) {
         if (this == &other) return *this;
-        free(values);
+        std::lock_guard<std::mutex> lock(mutex);
+        delete[] values;
+        new (&high) highlight(other.len);
+        values = new vval[len];
         len = other.len;
-        high.len = len;
-        values = (int*)malloc(len*sizeof(int));
-        memcpy(values, other.values, len*sizeof(int));
+        for (int i = 0; i < len; i++) new (&values[i]) vval(other.values[i], i, &high);
         return *this;
     }
 
-    int &operator[](int idx) {
+    vval &operator[](int idx) {
         if (idx < 0 || idx >= len) throw std::out_of_range(std::to_string(idx));
-        high.doHigh(idx);
+        high.doHigh(idx, values[idx]);
         return values[idx];
     };
 };
