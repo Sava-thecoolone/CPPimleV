@@ -1,6 +1,5 @@
 #include <variant>
 #include <thread>
-#include <iostream>
 #include "varray.cpp"
 #include "run.cpp"
 

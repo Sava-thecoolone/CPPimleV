@@ -1,10 +1,7 @@
 #pragma once
-#include <iostream>
 #include <thread>
 #include <chrono>
 #include <atomic>
-#include <unordered_set>
-#include <mutex>
 
 struct highlight {
     int len;

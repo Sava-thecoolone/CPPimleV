@@ -13,9 +13,9 @@ struct run {
 
     void exec(varray &arr, std::string &name, std::unordered_map<std::string, std::function<void(varray &, std::vector<std::variant<int, double>>, std::string &)>> &cache) {
         if (sleep) std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-    // #ifdef DEBUG
-    //     std::cout << "running " << func << "\n";
-    // #endif
+    #ifdef DEBUG
+        std::cout << "running " << func << "\n";
+    #endif
         cache[func](arr, args, name);
         new (&arr.high) highlight(arr.len);
         if (sleep) std::this_thread::sleep_for(std::chrono::milliseconds(1000));

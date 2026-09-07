@@ -1,5 +1,4 @@
 #pragma once
-#include <iostream>
 #define TSF_IMPLEMENTATION
 #include "tsf.h"
 #include "raylib.h"
@@ -37,9 +36,6 @@ AudioStream setupsound(varray &arr) {
     tsf_set_output(soundfont, TSF_STEREO_INTERLEAVED, 44100, 0.0f);
     tsf_channel_set_presetnumber(soundfont, 0, 17, 0);
     tsf_channel_midi_control(soundfont, 0, 72, 127);
-    // for (int i = 0; i < tsf_get_presetcount(soundfont); i++) {
-    //     std::cout << i << " : " << tsf_bank_get_presetname(soundfont, 0, i) << "\n";
-    // }
     AudioStream stream = LoadAudioStream(44100, 32, 2);
     SetAudioStreamCallback(stream, doaudio);
     PlayAudioStream(stream);

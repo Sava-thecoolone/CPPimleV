@@ -1,7 +1,6 @@
 #include <iostream>
 #include <csignal>
 #include <stacktrace>
-#include <cstdlib>
 #include "visualizer.cpp"
 #include "config.h"
 
