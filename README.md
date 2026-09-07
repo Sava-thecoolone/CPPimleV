@@ -4,7 +4,7 @@ yet another sort visualizer
 ## Compile
 you need to have raylib installed
 
-`g++ main.cpp -o main.exe -lraylib`
+`compilemain.bat`
 and
 `compileall.bat`
 
