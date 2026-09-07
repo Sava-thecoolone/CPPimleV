@@ -4,9 +4,8 @@ yet another sort visualizer
 ## Compile
 you need to have raylib installed
 
-`compilemain.bat`
-and
-`compileall.bat` (note: compileall takes a while, but you only need to do it once)
+run `compilemain.bat` to compile the visualizer
+run `compileall.bat` to compile all the algorithms, shuffles and renderers (note: this will a while, but you only need to do it once)
 
 ### **ONLY WORKS ON WINDOWS BECAUSE SCREW YOU**
 (sorry)
