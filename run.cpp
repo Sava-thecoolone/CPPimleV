@@ -17,7 +17,7 @@ struct run {
         std::cout << "running " << func << "\n";
     #endif
         cache[func](arr, args, name);
-        new (&arr.high) highlight(arr.len);
+        arr.high.reset();
         if (sleep) std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
 };

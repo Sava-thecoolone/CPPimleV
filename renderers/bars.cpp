@@ -24,7 +24,6 @@ extern "C" __declspec(dllexport) void run(varray &arr, std::vector<std::variant<
             ClearBackground(BLACK);
             int last = 0;
             double scale = GetScreenWidth()/((double)arr.len);
-            std::lock_guard<std::mutex> arrlock(arr.mutex);
             for (int i = 0; i < arr.len; i += std::max(1/scale, 1.0)) {
                 Color col = WHITE;
                 int value = arr.high.lastidx.load();
