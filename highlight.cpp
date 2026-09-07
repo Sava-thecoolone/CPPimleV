@@ -12,7 +12,6 @@ struct highlight {
     std::atomic<int> lastval;
     double delayMult;
     int unslept;
-    std::atomic<int> t;
 
     highlight() {
         this->len = 0;
@@ -20,7 +19,6 @@ struct highlight {
         lastval.store(-1);
         delayMult = 1;
         unslept = 0;
-        t = 0;
     }
 
     highlight(int len) {
@@ -29,7 +27,6 @@ struct highlight {
         lastval.store(-1);
         delayMult = 1;
         unslept = 0;
-        t = 0;
     }
 
     void doHigh(int idx, int val) {
