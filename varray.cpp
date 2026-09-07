@@ -3,17 +3,17 @@
 #include "highlight.cpp"
 
 struct vval {
-    int val;
+    std::atomic<int> val;
     int idx;
     highlight *high;
 
     vval() {}
     vval(int v) : val(v) {}
     vval(int v, int i, highlight *h) noexcept : val(v), idx(i), high(h) {}
-    vval &operator=(vval &other) {high->doHigh(idx, other.val); this->val = other.val; return *this;}
-    vval &operator=(int val) {high->doHigh(idx, val); this->val = val; return *this;}
-    vval(vval &&other) noexcept : val(other.val), idx(other.idx), high(other.high) {}
-    operator int() noexcept {return val;}
+    vval &operator=(vval &other) {high->doHigh(idx, other.val.load()); this->val.store(other.val.load()); return *this;}
+    vval &operator=(int val) {high->doHigh(idx, val); this->val.store(val); return *this;}
+    vval(vval &&other) noexcept : idx(other.idx), high(other.high) {val.store(other.val.load());}
+    operator int() noexcept {return val.load();}
 };
 
 struct varray {
